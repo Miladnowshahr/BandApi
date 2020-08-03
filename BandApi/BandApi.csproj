@@ -5,7 +5,26 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Controllers\" />
+    <Compile Remove="Migrations\20200801164909_init2.cs" />
+    <Compile Remove="Migrations\20200801164909_init2.Designer.cs" />
+    <Compile Remove="Migrations\20200802173401_init3.cs" />
+    <Compile Remove="Migrations\20200802173401_init3.Designer.cs" />
+    <Compile Remove="Migrations\20200802175919_init4.cs" />
+    <Compile Remove="Migrations\20200802175919_init4.Designer.cs" />
+    <Compile Remove="Migrations\20200802180452_init5.cs" />
+    <Compile Remove="Migrations\20200802180452_init5.Designer.cs" />
+    <Compile Remove="Migrations\20200802181304_init6.cs" />
+    <Compile Remove="Migrations\20200802181304_init6.Designer.cs" />
+    <Compile Remove="Migrations\20200802181347_init7.cs" />
+    <Compile Remove="Migrations\20200802181347_init7.Designer.cs" />
+    <Compile Remove="Migrations\20200802184150_init8.cs" />
+    <Compile Remove="Migrations\20200802184150_init8.Designer.cs" />
+    <Compile Remove="Migrations\20200802184447_init9.cs" />
+    <Compile Remove="Migrations\20200802184447_init9.Designer.cs" />
+    <Compile Remove="Migrations\20200802185148_init10.cs" />
+    <Compile Remove="Migrations\20200802185148_init10.Designer.cs" />
+    <Compile Remove="Migrations\20200802185729_init11.cs" />
+    <Compile Remove="Migrations\20200802185729_init11.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

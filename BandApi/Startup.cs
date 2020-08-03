@@ -1,10 +1,14 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using BandApi.DataLayer;
+using BandApi.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Formatters;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -24,7 +28,18 @@ namespace BandApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers();
+            services.AddControllers(setupAction =>
+            {
+                setupAction.RespectBrowserAcceptHeader = true;// برای جلوگیری از ورودی های که contentType هاشون فرق میکنه
+               
+            }).AddXmlDataContractSerializerFormatters();
+           
+
+            services.AddScoped<IBandAlbumRepository, BandAlbumRepostitory>();
+            services.AddDbContext<BandDbContext>(option =>
+            {
+                option.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -39,10 +54,13 @@ namespace BandApi
 
             app.UseAuthorization();
 
+          
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
             });
+
+          //  BandDbContext.CreateSeedData(app.ApplicationServices, Configuration).Wait();
         }
     }
 }

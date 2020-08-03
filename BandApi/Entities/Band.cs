@@ -9,7 +9,7 @@ namespace BandApi.Entities
     public class Band
     {
         [Key]
-        public Guid Id { get; set; }
+        public Guid BandId { get; set; }
 
         [Required]
         [MaxLength(100)]
@@ -20,6 +20,6 @@ namespace BandApi.Entities
         public string MainGenre { get; set; }
 
         
-        public ICollection<Album> Albums { get; set; } = new List<Album>();// null refrence 
+        public virtual ICollection<Album> Albums { get; set; } = new List<Album>();// null refrence 
     }
 }

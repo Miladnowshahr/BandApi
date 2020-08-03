@@ -1,13 +1,16 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace BandApi.Entities
 {
+    
     public class Album
     {
         [Key]
         public Guid Id { get; set; }
+        
         [Required]
         [MaxLength(200)]
         public string Title { get; set; }
@@ -15,8 +18,7 @@ namespace BandApi.Entities
         [MaxLength(400)]
         public string Description { get; set; }
 
-        [ForeignKey("BandId")]
-        public Band Band { get; set; }
-        public Guid BandId { get; set; }
+        public virtual Band Band { get; set; }
+        public Guid? BandId { get; set; }
     }
 }
