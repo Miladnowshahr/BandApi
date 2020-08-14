@@ -1,18 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using AutoMapper;
 using BandApi.DataLayer;
 using BandApi.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Formatters;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 
 namespace BandApi
 {
@@ -29,11 +25,14 @@ namespace BandApi
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers(setupAction =>
-            {
-                setupAction.RespectBrowserAcceptHeader = true;// برای جلوگیری از ورودی های که contentType هاشون فرق میکنه
-               
-            }).AddXmlDataContractSerializerFormatters();
-           
+        {
+            //when return action is not json result 
+            // برای جلوگیری از ورودی های که contentType هاشون فرق میکنه
+                setupAction.ReturnHttpNotAcceptable = true; 
+        }).AddXmlDataContractSerializerFormatters();
+            //autoMapper
+            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
 
             services.AddScoped<IBandAlbumRepository, BandAlbumRepostitory>();
             services.AddDbContext<BandDbContext>(option =>
@@ -49,6 +48,8 @@ namespace BandApi
             {
                 app.UseDeveloperExceptionPage();
             }
+          
+
 
             app.UseRouting();
 
@@ -60,7 +61,7 @@ namespace BandApi
                 endpoints.MapControllers();
             });
 
-          //  BandDbContext.CreateSeedData(app.ApplicationServices, Configuration).Wait();
+            //BandDbContext.CreateSeedData(app.ApplicationServices, Configuration).Wait();
         }
     }
 }

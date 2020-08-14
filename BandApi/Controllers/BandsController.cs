@@ -1,4 +1,8 @@
-﻿using BandApi.Services;
+﻿using AutoMapper;
+using BandApi.Entities;
+using BandApi.Helper;
+using BandApi.Model;
+using BandApi.Services;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -8,23 +12,41 @@ using System.Threading.Tasks;
 
 namespace BandApi.Controllers
 {
-    [ApiController]
     [Route("api/bands")]
-    public class BandsController:ControllerBase
+
+    [ApiController]
+    public class BandsController : ControllerBase
     {
         private readonly IBandAlbumRepository _repo;
-
-        public BandsController(IBandAlbumRepository repo)
+        private readonly IMapper _mapper;  //create define field
+        public BandsController(IBandAlbumRepository repo, IMapper mapper)
         {
-            _repo = repo?? throw new ArgumentNullException(nameof(repo));
-        }
-        public IActionResult GetBands()
-        {
-            var bandsFromRepo = _repo.GetBands();
-            return new JsonResult(bandsFromRepo);
+            _repo = repo ?? throw new ArgumentNullException(nameof(repo));
+            _mapper = mapper ??
+                throw new ArgumentNullException(nameof(mapper)); //bind mapper
         }
 
-        [HttpGet("{bandId}")]
+        public IActionResult GetBands([FromQuery]BandResourceParameter bandParamter)
+        {
+           
+            var bandsFromRepo = _repo.GetBands(bandParamter);
+
+            //به جای استفاده از این همه کد و تکرار کد در متدهای دیگر از روش auto mapper استفاده می کنیم
+            //var bandDto = new List<BandDto>();
+            //foreach (var item in bandsFromRepo)
+            //{
+            //    bandDto.Add(new BandDto()
+            //    {
+            //        BandId=item.BandId,
+            //        Name=item.Name,
+            //        MainGenre=item.MainGenre,
+            //        FoundedYearAgo=$"{item.Founded.ToString("yyyy")} ({item.Founded.GetYearAgo()} years ago)"
+            //    });
+            //}
+            return Ok(_mapper.Map<IEnumerable<BandDto>>(bandsFromRepo ));//create map to banddto
+        }
+
+        [HttpGet("{bandId}",Name ="GetBand")]
         public IActionResult GetBand(Guid bandId)
         {
             var bandFromRepo = _repo.GetBand(bandId);
@@ -34,6 +56,16 @@ namespace BandApi.Controllers
             }
 
             return Ok(bandFromRepo);
+        }
+        [HttpPost]
+        public ActionResult<BandDto> CreateBand([FromBody] BandForCreatingDto band)
+        {
+            var bandEntity = _mapper.Map<Band>(band);
+            _repo.AddBand(bandEntity);
+            _repo.Save();
+
+            var bandtoReturn = _mapper.Map<BandDto>(bandEntity);
+            return CreatedAtRoute("GetBand", new { bandId = bandtoReturn.BandId },bandtoReturn); 
         }
 
     }

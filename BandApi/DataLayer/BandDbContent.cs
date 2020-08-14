@@ -10,14 +10,14 @@ using System.Threading.Tasks;
 
 namespace BandApi.DataLayer
 {
-    public class BandDbContext:DbContext
+    public class BandDbContext : DbContext
     {
-        public BandDbContext(DbContextOptions<BandDbContext> options):base(options) { }
+        public BandDbContext(DbContextOptions<BandDbContext> options) : base(options) { }
 
         public DbSet<Band> Bands { get; set; }
         public DbSet<Album> Albums { get; set; }
 
-        public IConfiguration Configuration { get; } 
+        public IConfiguration Configuration { get; }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)
@@ -32,21 +32,32 @@ namespace BandApi.DataLayer
         {
             using (var serviceScope = serviceProvider.GetRequiredService<IServiceScopeFactory>().CreateScope())
             {
-              var service=  serviceScope.ServiceProvider.GetService<BandDbContext>();
+                var service = serviceScope.ServiceProvider.GetService<BandDbContext>();
                 Seed(service);
             }
         }
 
         public static void Seed(BandDbContext context)
         {
-            context.Bands.Add(new Band
+            //context.Bands.Add(new Band
+            //{
+            //    BandId = Guid.Parse("DAFD8BA4-12D0-B692-49DF-876E317246FB"),
+            //    Name = "Metallica",
+            //    Founded = new DateTime(1980, 1, 1),
+            //    MainGenre = "Heavy Metal",
+
+            //});
+
+            context.Albums.Add(new Album
             {
-                BandId = Guid.Parse("DAFD8BA4-12D0-B692-49DF-876E317246FB"),
-                            Name = "Metallica",
-                            Founded = new DateTime(1980, 1, 1),
-                            MainGenre = "Heavy Metal",
+                BandId = Guid.Parse("dafd8ba4-12d0-b692-49df-876e317246fb"),
+                Title = "Hunting Hight and Low",
+                Description = "Awesome Debut album by A-Ha",
+                Id = Guid.NewGuid()
 
             });
+            ;
+
             context.SaveChanges();
         }
 
@@ -62,7 +73,7 @@ namespace BandApi.DataLayer
         //            Name = "Metallica",
         //            Founded = new DateTime(1980, 1, 1),
         //            MainGenre = "Heavy Metal",
-                 
+
         //        }) ;
         //        b.HasData(new Band
         //        {
@@ -77,7 +88,7 @@ namespace BandApi.DataLayer
         //            Founded = new DateTime(1981, 6, 5),
         //            MainGenre = "pop"
         //        });
-               
+
         //    });
 
         //    modelBuilder.Entity<Album>(a =>
@@ -101,14 +112,14 @@ namespace BandApi.DataLayer
         //    //has data like seed    
         //    //modelBuilder.Entity<Band>().HasData(new Band()
         //    //{
-                
+
         //    //     new Band
         //    //{
-                
+
         //    //},
         //    //new Band
         //    //{
-               
+
         //    //},
         //    //new Band
         //    //{

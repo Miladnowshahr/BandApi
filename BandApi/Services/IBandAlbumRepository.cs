@@ -1,5 +1,6 @@
 ﻿using BandApi.DataLayer;
 using BandApi.Entities;
+using BandApi.Helper;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -22,6 +23,7 @@ namespace BandApi.Services
         void DeleteAlbum(Album album) ;
 
         IEnumerable<Band> GetBands();
+        IEnumerable<Band> GetBands(BandResourceParameter bandParam);
         Band GetBand(Guid bandId);
         IEnumerable<Band> GetBands(IEnumerable<Guid> bandId);
         void AddBand(Band band);
